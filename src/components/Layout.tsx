@@ -74,8 +74,7 @@ const Layout = ({
               <div className="w-8 h-8 bg-success rounded flex items-center justify-center">
                 <span className="text-success-foreground font-bold text-sm">$</span>
               </div>
-              <span className="text-xl font-bold text-foreground">DollarPrim
-            </span>
+              <span className="text-xl font-bold text-foreground">DollarPrinter</span>
             </div>
             
             <div className="flex items-center gap-1">
