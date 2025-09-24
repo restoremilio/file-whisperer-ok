@@ -1,9 +1,27 @@
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { useTrading } from '@/contexts/TradingContext';
 
 const Analysis = () => {
+  const { 
+    isConnected, 
+    currentPrice, 
+    tickData, 
+    digitAnalysis,
+    subscribeTo 
+  } = useTrading();
+
+  const lastDigits = Array.from({ length: 10 }, (_, i) => {
+    const digit = tickData ? Math.floor(tickData.quote * Math.pow(10, i + 4)) % 10 : Math.floor(Math.random() * 10);
+    return digit;
+  }).reverse();
+
+  const handleSymbolChange = (symbol: string) => {
+    subscribeTo(symbol);
+  };
   return (
     <div className="min-h-screen bg-background">
       <div className="flex">
@@ -18,14 +36,14 @@ const Analysis = () => {
                 <div className="w-2 h-2 bg-trading-blue rounded-full"></div>
                 <span className="text-foreground font-medium">Volatility Index</span>
               </div>
-              <Select>
+              <Select onValueChange={handleSymbolChange} defaultValue="R_10">
                 <SelectTrigger className="bg-trading-card border-trading-border">
                   <SelectValue placeholder="VOLATILITY INDEX 10" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="vol10">VOLATILITY INDEX 10</SelectItem>
-                  <SelectItem value="vol25">VOLATILITY INDEX 25</SelectItem>
-                  <SelectItem value="vol50">VOLATILITY INDEX 50</SelectItem>
+                  <SelectItem value="R_10">VOLATILITY INDEX 10</SelectItem>
+                  <SelectItem value="R_25">VOLATILITY INDEX 25</SelectItem>
+                  <SelectItem value="R_50">VOLATILITY INDEX 50</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -35,11 +53,9 @@ const Analysis = () => {
                 <div className="w-2 h-2 bg-trading-blue rounded-full"></div>
                 <span className="text-foreground font-medium">Number of Digits</span>
               </div>
-              <Input 
-                value="60" 
-                className="bg-trading-card border-trading-border text-foreground"
-                readOnly
-              />
+              <div className="p-3 bg-trading-card border border-trading-border rounded-md text-foreground">
+                60
+              </div>
             </div>
           </div>
 
@@ -60,10 +76,10 @@ const Analysis = () => {
 
           <div className="mt-8 grid grid-cols-2 gap-2">
             <Button className="bg-trading-blue hover:bg-trading-blue/90 text-white">
-              Even: 50.00%
+              Even: {digitAnalysis.even}%
             </Button>
             <Button className="bg-trading-red hover:bg-trading-red/90 text-white">
-              Odd: 50.00%
+              Odd: {digitAnalysis.odd}%
             </Button>
           </div>
         </div>
@@ -73,7 +89,7 @@ const Analysis = () => {
           <div className="text-center mb-8">
             <div className="text-sm text-muted-foreground mb-2">CURRENT PRICE</div>
             <div className="text-4xl font-bold text-foreground mb-4">
-              Latest Price: 5853.629
+              Latest Price: {currentPrice ? currentPrice.toFixed(3) : '0.000'}
             </div>
             
             <div className="flex items-center justify-center gap-2 mb-6">
@@ -104,11 +120,11 @@ const Analysis = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Percentage</span>
-                    <span className="text-success font-bold">50.00%</span>
+                    <span className="text-success font-bold">{digitAnalysis.even}%</span>
                   </div>
                   <div className="w-full bg-trading-bg rounded-full h-8">
-                    <div className="bg-success h-8 rounded-full flex items-center justify-center text-white font-bold" style={{width: '50%'}}>
-                      50.00%
+                    <div className="bg-success h-8 rounded-full flex items-center justify-center text-white font-bold" style={{width: `${digitAnalysis.even}%`}}>
+                      {digitAnalysis.even}%
                     </div>
                   </div>
                   <div className="text-center text-sm text-muted-foreground">Even</div>
@@ -119,11 +135,11 @@ const Analysis = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Percentage</span>
-                    <span className="text-success font-bold">50.00%</span>
+                    <span className="text-success font-bold">{digitAnalysis.odd}%</span>
                   </div>
                   <div className="w-full bg-trading-bg rounded-full h-8">
-                    <div className="bg-red-400 h-8 rounded-full flex items-center justify-center text-white font-bold" style={{width: '50%'}}>
-                      50.00%
+                    <div className="bg-red-400 h-8 rounded-full flex items-center justify-center text-white font-bold" style={{width: `${digitAnalysis.odd}%`}}>
+                      {digitAnalysis.odd}%
                     </div>
                   </div>
                   <div className="text-center text-sm text-muted-foreground">Odd</div>
