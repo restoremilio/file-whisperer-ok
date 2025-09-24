@@ -102,17 +102,19 @@ const Layout = ({
       {/* Navigation */}
       <nav className="bg-trading-bg border-b border-trading-border px-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {navigation.map(item => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.href;
-            return <Link key={item.name} to={item.href}>
-                  <Button variant="ghost" size="sm" className={`px-4 py-2 rounded-none border-b-2 transition-colors ${isActive ? "border-trading-orange text-trading-orange bg-trading-card" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-trading-card/50"}`}>
-                    <Icon className="h-4 w-4 mr-2" />
-                    {item.name}
-                  </Button>
-                </Link>;
-          })}
+          <div className="flex-1 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center min-w-max">
+              {navigation.map(item => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.href;
+              return <Link key={item.name} to={item.href}>
+                    <Button variant="ghost" size="sm" className={`px-4 py-2 rounded-none border-b-2 transition-colors whitespace-nowrap ${isActive ? "border-trading-orange text-trading-orange bg-trading-card" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-trading-card/50"}`}>
+                      <Icon className="h-4 w-4 mr-2" />
+                      {item.name}
+                    </Button>
+                  </Link>;
+            })}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
